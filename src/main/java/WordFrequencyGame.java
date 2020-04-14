@@ -8,45 +8,46 @@ public class WordFrequencyGame {
     public static final String NEWLINE_DELIMITER = "\n";
 
     public String getResult(String sentence) {
+        try {
+            List<WordInfo> wordInfoList = getWordInfoList(sentence);
 
-
-        if (sentence.split(SPACE_PATTERN).length == 1) {
-            return sentence + " 1";
-        } else {
-
-            try {
-
-                //split the input string with 1 to n pieces of spaces
-                String[] words = sentence.split(SPACE_PATTERN);
-
-                List<WordInfo> wordInfoList = new ArrayList<>();
-                for (String word : words) {
-                    WordInfo wordInfo = new WordInfo(word, 1);
-                    wordInfoList.add(wordInfo);
-                }
-
-                //get the map for the next step of sizing the same word
-                Map<String, List<WordInfo>> map = getListMap(wordInfoList);
-
-                List<WordInfo> list = new ArrayList<>();
-                for (Map.Entry<String, List<WordInfo>> entry : map.entrySet()) {
-                    WordInfo wordInfo = new WordInfo(entry.getKey(), entry.getValue().size());
-                    list.add(wordInfo);
-                }
-                wordInfoList = list;
-
-                wordInfoList.sort((firstWord, secondWord) -> secondWord.getWordCount() - firstWord.getWordCount());
-
-                StringJoiner joiner = new StringJoiner(NEWLINE_DELIMITER);
-                for (WordInfo wordInfo : wordInfoList) {
-                    String formatWordFrequencyResult = wordInfo.getWord() + SPACE_DELIMITER + wordInfo.getWordCount();
-                    joiner.add(formatWordFrequencyResult);
-                }
-                return joiner.toString();
-            } catch (Exception e) {
-                return CALCULATE_ERROR;
-            }
+            return formatWordFrequencyResult(wordInfoList);
+        } catch (Exception e) {
+            return CALCULATE_ERROR;
         }
+    }
+
+    private String formatWordFrequencyResult(List<WordInfo> wordInfoList) {
+        StringJoiner joiner = new StringJoiner(NEWLINE_DELIMITER);
+        for (WordInfo wordInfo : wordInfoList) {
+            String formatWordFrequencyResult = wordInfo.getWord() + SPACE_DELIMITER + wordInfo.getWordCount();
+            joiner.add(formatWordFrequencyResult);
+        }
+        return joiner.toString();
+    }
+
+    private List<WordInfo> getWordInfoList(String sentence) {
+        //split the input string with 1 to n pieces of spaces
+        String[] words = sentence.split(SPACE_PATTERN);
+
+        List<WordInfo> wordInfoList = new ArrayList<>();
+        for (String word : words) {
+            WordInfo wordInfo = new WordInfo(word, 1);
+            wordInfoList.add(wordInfo);
+        }
+
+        //get the map for the next step of sizing the same word
+        Map<String, List<WordInfo>> map = getListMap(wordInfoList);
+
+        List<WordInfo> list = new ArrayList<>();
+        for (Map.Entry<String, List<WordInfo>> entry : map.entrySet()) {
+            WordInfo wordInfo = new WordInfo(entry.getKey(), entry.getValue().size());
+            list.add(wordInfo);
+        }
+        wordInfoList = list;
+
+        wordInfoList.sort((firstWord, secondWord) -> secondWord.getWordCount() - firstWord.getWordCount());
+        return wordInfoList;
     }
 
     private Map<String, List<WordInfo>> getListMap(List<WordInfo> wordInfoList) {
