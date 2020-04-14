@@ -1,58 +1,64 @@
 import java.util.*;
 
 public class WordFrequencyGame {
-    public String getResult(String inputStr) {
+
+    public static final String SPACE_PATTERN = "\\s+";
+    public static final String CALCULATE_ERROR = "Calculate Error";
+    public static final String SPACE_DELIMITER = " ";
+    public static final String NEWLINE_DELIMITER = "\n";
+
+    public String getResult(String sentence) {
 
 
-        if (inputStr.split("\\s+").length == 1) {
-            return inputStr + " 1";
+        if (sentence.split(SPACE_PATTERN).length == 1) {
+            return sentence + " 1";
         } else {
 
             try {
 
                 //split the input string with 1 to n pieces of spaces
-                String[] arr = inputStr.split("\\s+");
+                String[] words = sentence.split(SPACE_PATTERN);
 
-                List<Input> inputList = new ArrayList<>();
-                for (String s : arr) {
-                    Input input = new Input(s, 1);
-                    inputList.add(input);
+                List<WordInfo> wordInfoList = new ArrayList<>();
+                for (String word : words) {
+                    WordInfo wordInfo = new WordInfo(word, 1);
+                    wordInfoList.add(wordInfo);
                 }
 
                 //get the map for the next step of sizing the same word
-                Map<String, List<Input>> map = getListMap(inputList);
+                Map<String, List<WordInfo>> map = getListMap(wordInfoList);
 
-                List<Input> list = new ArrayList<>();
-                for (Map.Entry<String, List<Input>> entry : map.entrySet()) {
-                    Input input = new Input(entry.getKey(), entry.getValue().size());
-                    list.add(input);
+                List<WordInfo> list = new ArrayList<>();
+                for (Map.Entry<String, List<WordInfo>> entry : map.entrySet()) {
+                    WordInfo wordInfo = new WordInfo(entry.getKey(), entry.getValue().size());
+                    list.add(wordInfo);
                 }
-                inputList = list;
+                wordInfoList = list;
 
-                inputList.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
+                wordInfoList.sort((firstWord, secondWord) -> secondWord.getWordCount() - firstWord.getWordCount());
 
-                StringJoiner joiner = new StringJoiner("\n");
-                for (Input w : inputList) {
-                    String s = w.getValue() + " " + w.getWordCount();
-                    joiner.add(s);
+                StringJoiner joiner = new StringJoiner(NEWLINE_DELIMITER);
+                for (WordInfo wordInfo : wordInfoList) {
+                    String formatWordFrequencyResult = wordInfo.getWord() + SPACE_DELIMITER + wordInfo.getWordCount();
+                    joiner.add(formatWordFrequencyResult);
                 }
                 return joiner.toString();
             } catch (Exception e) {
-                return "Calculate Error";
+                return CALCULATE_ERROR;
             }
         }
     }
 
-    private Map<String, List<Input>> getListMap(List<Input> inputList) {
-        Map<String, List<Input>> map = new HashMap<>();
-        for (Input input : inputList) {
+    private Map<String, List<WordInfo>> getListMap(List<WordInfo> wordInfoList) {
+        Map<String, List<WordInfo>> map = new HashMap<>();
+        for (WordInfo wordInfo : wordInfoList) {
 //       map.computeIfAbsent(input.getValue(), k -> new ArrayList<>()).add(input);
-            if (!map.containsKey(input.getValue())) {
+            if (!map.containsKey(wordInfo.getWord())) {
                 ArrayList arr = new ArrayList<>();
-                arr.add(input);
-                map.put(input.getValue(), arr);
+                arr.add(wordInfo);
+                map.put(wordInfo.getWord(), arr);
             } else {
-                map.get(input.getValue()).add(input);
+                map.get(wordInfo.getWord()).add(wordInfo);
             }
         }
         return map;
