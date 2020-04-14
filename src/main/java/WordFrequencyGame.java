@@ -7,7 +7,7 @@ public class WordFrequencyGame {
     private static final String CALCULATE_ERROR = "Calculate Error";
     private static final String NEWLINE_DELIMITER = "\n";
 
-    private static int compare(WordInfo firstWord, WordInfo secondWord) {
+    private static int compareWordInfo(WordInfo firstWord, WordInfo secondWord) {
         return secondWord.getWordCount() - firstWord.getWordCount();
     }
 
@@ -30,6 +30,6 @@ public class WordFrequencyGame {
         List<String> words = Arrays.asList(sentence.split(SPACE_PATTERN));
 
         return words.stream().distinct().map(word -> new WordInfo(word, Collections.frequency(words, word)))
-                .sorted(WordFrequencyGame::compare).collect(Collectors.toList());
+                .sorted(WordFrequencyGame::compareWordInfo).collect(Collectors.toList());
     }
 }
