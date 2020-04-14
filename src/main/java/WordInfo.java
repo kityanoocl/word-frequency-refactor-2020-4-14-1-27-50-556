@@ -1,4 +1,5 @@
 public class WordInfo {
+    public static final String SPACE_DELIMITER = " ";
     private String word;
     private int wordCount;
 
@@ -13,5 +14,10 @@ public class WordInfo {
 
     public int getWordCount() {
         return this.wordCount;
+    }
+
+    @Override
+    public String toString() {
+        return this.getWord() + SPACE_DELIMITER + this.getWordCount();
     }
 }
