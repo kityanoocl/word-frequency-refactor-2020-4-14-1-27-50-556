@@ -25,10 +25,7 @@ public class WordFrequencyGame {
         List<String> words = Arrays.asList(sentence.split(SPACE_PATTERN));
 
         List<WordInfo> wordInfoList = new ArrayList<>();
-        for (String word : new HashSet<>(words)) {
-            WordInfo wordInfo = new WordInfo(word, Collections.frequency(words, word));
-            wordInfoList.add(wordInfo);
-        }
+        words.stream().distinct().forEach(word -> wordInfoList.add(new WordInfo(word, Collections.frequency(words, word))));
 
         wordInfoList.sort((firstWord, secondWord) -> secondWord.getWordCount() - firstWord.getWordCount());
         return wordInfoList;
