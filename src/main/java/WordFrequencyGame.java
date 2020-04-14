@@ -16,11 +16,11 @@ public class WordFrequencyGame {
     }
 
     private String formatWordFrequencyResult(List<WordInfo> wordInfoList) {
-        StringJoiner joiner = new StringJoiner(NEWLINE_DELIMITER);
+        StringJoiner wordFrequencyResult = new StringJoiner(NEWLINE_DELIMITER);
         for (WordInfo wordInfo : wordInfoList) {
-            joiner.add(wordInfo.toString());
+            wordFrequencyResult.add(wordInfo.toString());
         }
-        return joiner.toString();
+        return wordFrequencyResult.toString();
     }
 
     private List<WordInfo> getWordInfoList(String sentence) {
